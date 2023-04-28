@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import "./App.css";
 import Nav from "./components/Nav";
+import Banner from "./components/Banner";
 
 function App() {
   return (
     <Container>
       <Nav />
+      <Banner />
     </Container>
   );
 }
@@ -21,12 +23,11 @@ const Container = styled.main`
   padding: 0 calc(3.5vw + 5px);
 
   &::after {
-    background-image: url("./images/home-background.png");
+    background: url("./images/home-background.png") center center / cover no-repeat fixed;
     content: "";
     position: absolute;
     inset: 0;
     opacity: 1;
     z-index: -1;
-    background-color: #145;
   }
 `;
