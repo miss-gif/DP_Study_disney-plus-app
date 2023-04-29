@@ -1,3 +1,5 @@
+// import axios from "../../api/axios";
+import axios from "../api/axios";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -7,6 +9,14 @@ const Nav = () => {
   const { pathname } = useLocation();
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
+  const [searchResults, setSearchResults] = useState([]);
+
+  const useQuery = () => {
+    return new URLSearchParams(useLocation().search);
+  };
+
+  let query = useQuery();
+  const searchTerm = query.get("q");
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -14,6 +24,12 @@ const Nav = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    if (searchTerm) {
+      fetchSearchMovie(searchTerm);
+    }
+  }, [searchTerm]);
 
   const handleScroll = () => {
     if (window.scrollY > 50) {
@@ -26,6 +42,16 @@ const Nav = () => {
   const handleChange = (e) => {
     setSearchValue(e.target.value);
     navigate(`/search?q=${e.target.value}`);
+  };
+
+  const fetchSearchMovie = async (searchTerm) => {
+    try {
+      const request = await axios.get(`/search/multi?include_adult=false&query=${searchTerm}`);
+      console.log(request);
+      setSearchResults(request.data.results);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
